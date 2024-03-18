@@ -5,3 +5,16 @@ body {
   max-width: 38rem;
   padding: 2rem;
 }
+
+thead {
+  position: sticky;
+  z-index: 1;
+  border: 1px;
+  background-color: black;
+  color: white;
+}
+
+#content {
+  display: flex;
+  justify-content: space-around;
+}
