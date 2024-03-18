@@ -10,12 +10,13 @@
 <body>
   <h1>Loop Queue</h1>
   <div id="content">
-    <table>
+    <table id="queue">
       <thead>
         <tr>
           <th scope="col">Queue</th>
         </tr>
       </thead>
+      <tbody id="queueBody"></tbody>
     </table>
     <table>
       <thead>
@@ -25,6 +26,7 @@
       </thead>
     </table>
   </div>
+  <input type="button" value="Add" id="add_item"/>
   <script type="module" src="/src/renderer.js"></script>
 </body>
 

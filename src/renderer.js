@@ -29,3 +29,14 @@
 import './index.css';
 
 console.log('👋 This message is being logged by "renderer.js", included via Vite');
+
+document.querySelector("#add_item").addEventListener('click', () => addItem());
+
+function addItem(){
+  let queue = document.querySelector('#queueBody')
+  let tr = document.createElement("tr")
+  let td = document.createElement("td")
+  td.append("New item")
+  tr.append(td)
+  queue.append(tr)
+}
