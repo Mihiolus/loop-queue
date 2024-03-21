@@ -32,11 +32,35 @@ console.log('👋 This message is being logged by "renderer.js", included via Vi
 
 document.querySelector("#add_item").addEventListener('click', () => addItem());
 
+var items = ["Item 1"];
+
+renderItems();
+
 function addItem(){
-  let queue = document.querySelector('#queueBody')
-  let tr = document.createElement("tr")
-  let td = document.createElement("td")
-  td.append("New item")
-  tr.append(td)
-  queue.append(tr)
+  items.push("New item");
+  let queue = document.querySelector('#queue');
+  let newRow = queue.insertRow(queue.rows.length);
+
+  newRow.insertCell(0).innerHTML = "New item";
+  newRow.insertCell(1).innerHTML = '<button onclick="transferItem(this)">\></button>'
+}
+
+function transferItem(button){
+  let queue = document.querySelector('#queue')
+  let row = button.parentNode.parentNode;
+}
+
+function renderItems(){
+  let queue = document.querySelector('#queueBody');
+  for (var item of items){
+    queue.append(createNode(item));
+  }
+}
+
+function createNode(text){
+  let tr = document.createElement("tr");
+  let td = document.createElement("td");
+  td.append(text);
+  tr.append(td);
+  return tr;
 }
