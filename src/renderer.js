@@ -30,44 +30,33 @@ import './index.css';
 
 console.log('👋 This message is being logged by "renderer.js", included via Vite');
 
-document.querySelector("#add_item").addEventListener('click', () => addItem());
+const queueList = document.querySelector('#queue ol')
+const itemInput = document.querySelector('input')
+const addButton = document.querySelector('button')
+const planList = document.querySelector('#plan ol')
 
-var items = ["Item 1"];
-
-renderItems();
-
-function addItem(){
-  items.push("New item");
-  let queue = document.querySelector('#queue');
-  let newRow = queue.insertRow();
-
-  newRow.insertCell(0).innerHTML = "New item";
-  const buttonCell = newRow.insertCell(1);
-  const button = document.createElement("button");
+addButton.addEventListener('click', () => {
+  let itemName = itemInput.value;
+  itemInput.value = '';
+  let queueItem = document.createElement('li');
+  let span = document.createElement('span');
+  let button = document.createElement('button');
+  queueItem.appendChild(span);
+  queueItem.appendChild(button);
+  span.textContent = itemName;
+  queueList.appendChild(queueItem);
   button.textContent = "→";
-  button.onclick = () => transferItem(newRow, "New item");
-  buttonCell.append(button);
-}
+  button.addEventListener('click', () => {
+    const planItem = document.createElement('li');
+    const span = document.createElement('span');
+    const button = document.createElement('button');
+    planItem.appendChild(button);
+    planItem.appendChild(span);
+    span.textContent = itemName;
+    button.textContent = 'x'
+    planList.appendChild(planItem);
 
-function transferItem(callRow, item){
-  let plan = document.querySelector('#plan');
-  callRow.remove();
-  
-  let newRow = plan.insertRow();
-  newRow.insertCell(0).innerHTML = item
-}
-
-function renderItems(){
-  let queue = document.querySelector('#queueBody');
-  for (var item of items){
-    queue.append(createNode(item));
-  }
-}
-
-function createNode(text){
-  let tr = document.createElement("tr");
-  let td = document.createElement("td");
-  td.append(text);
-  tr.append(td);
-  return tr;
-}
+    queueList.insertBefore(queueItem, queueList.childNodes[0]);
+  })
+  itemInput.focus();
+});
