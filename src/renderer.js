@@ -48,12 +48,7 @@ addButton.addEventListener('click', () => {
   button.textContent = "→";
   button.addEventListener('click', () => {
     const planItem = document.createElement('li');
-    const span = document.createElement('span');
-    const button = document.createElement('button');
-    planItem.appendChild(button);
-    planItem.appendChild(span);
-    span.textContent = itemName;
-    button.textContent = 'x'
+    planItem.textContent = itemName;
     planList.appendChild(planItem);
 
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
