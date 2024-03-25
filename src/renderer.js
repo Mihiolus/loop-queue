@@ -39,15 +39,22 @@ renderItems();
 function addItem(){
   items.push("New item");
   let queue = document.querySelector('#queue');
-  let newRow = queue.insertRow(queue.rows.length);
+  let newRow = queue.insertRow();
 
   newRow.insertCell(0).innerHTML = "New item";
-  newRow.insertCell(1).innerHTML = '<button onclick="transferItem(this)">\></button>'
+  const buttonCell = newRow.insertCell(1);
+  const button = document.createElement("button");
+  button.textContent = "→";
+  button.onclick = () => transferItem(newRow, "New item");
+  buttonCell.append(button);
 }
 
-function transferItem(button){
-  let queue = document.querySelector('#queue')
-  let row = button.parentNode.parentNode;
+function transferItem(callRow, item){
+  let plan = document.querySelector('#plan');
+  callRow.remove();
+  
+  let newRow = plan.insertRow();
+  newRow.insertCell(0).innerHTML = item
 }
 
 function renderItems(){
