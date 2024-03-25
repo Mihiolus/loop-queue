@@ -55,3 +55,10 @@ addButton.addEventListener('click', () => {
   })
   itemInput.focus();
 });
+
+itemInput.addEventListener('keypress', function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addButton.click();
+  }
+})
