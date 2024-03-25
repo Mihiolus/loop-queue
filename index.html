@@ -10,23 +10,27 @@
 <body>
   <h1>Loop Queue</h1>
   <div id="content">
-    <table id="queue">
-      <thead>
-        <tr>
-          <th scope="col">Queue</th>
-        </tr>
-      </thead>
-      <tbody id="queueBody"></tbody>
-    </table>
-    <table id="plan">
-      <thead>
-        <tr>
-          <th scope="col">Plan</th>
-        </tr>
-      </thead>
-    </table>
+    <div id="queue" class="horizontal-pane">
+
+      <div>
+        <label for="newitem">New item:</label>
+        <input type="text" name="newitem" id="newitem">
+        <button>Add</button>
+      </div>
+
+      <h2>Queue</h2>
+      <ol>
+
+      </ol>
+    </div>
+
+    <div id="plan" class="horizontal-pane">
+      <h2>Plan</h2>
+      <ol>
+
+      </ol>
+    </div>
   </div>
-  <input type="button" value="Add" id="add_item"/>
   <script type="module" src="/src/renderer.js"></script>
 </body>
 
