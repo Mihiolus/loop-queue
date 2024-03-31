@@ -1,53 +1,16 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
 
-const user_path = app.getPath("documents")
-const data = JSON.stringify({
-  "squadName": "Super hero squad",
-  "homeTown": "Metro City",
-  "formed": 2016,
-  "secretBase": "Super tower",
-  "active": true,
-  "members": [
-    {
-      "name": "Molecule Man",
-      "age": 29,
-      "secretIdentity": "Dan Jukes",
-      "powers": ["Radiation resistance", "Turning tiny", "Radiation blast"]
-    },
-    {
-      "name": "Madame Uppercut",
-      "age": 39,
-      "secretIdentity": "Jane Wilson",
-      "powers": [
-        "Million tonne punch",
-        "Damage resistance",
-        "Superhuman reflexes"
-      ]
-    },
-    {
-      "name": "Eternal Flame",
-      "age": 1000000,
-      "secretIdentity": "Unknown",
-      "powers": [
-        "Immortality",
-        "Heat Immunity",
-        "Inferno",
-        "Teleportation",
-        "Interdimensional travel"
-      ]
-    }
-  ]
-}
-)
-const file_path = path.join(user_path, "./loop-queue-data.json")
-fs.writeFileSync(file_path, data)
+const folder_path = app.getPath("documents");
+const data = {
+  queue: [],
+  plan: []
+};
+const file_path = path.join(folder_path, "./loop-queue-data.json")
 
 const read_data = fs.readFileSync(file_path, { encoding: 'utf-8'});
 const parsed_data = JSON.parse(read_data);
-console.log(parsed_data.squadName);
-console.log(read_data);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -55,8 +18,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 function handleAddToQueue (event, itemName) {
-  console.log(event);
-  console.log(itemName);
+  data.queue.push(itemName);
+  fs.writeFileSync(file_path, JSON.stringify(data));
 }
 
 const createWindow = () => {
