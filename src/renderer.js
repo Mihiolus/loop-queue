@@ -54,6 +54,7 @@ addButton.addEventListener('click', () => {
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   })
   itemInput.focus();
+  window.electronAPI.addQueue(itemName);
 });
 
 itemInput.addEventListener('keypress', function(e) {
