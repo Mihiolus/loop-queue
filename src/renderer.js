@@ -36,8 +36,9 @@ const addButton = document.querySelector('button')
 const planList = document.querySelector('#plan ol')
 
 const data = await window.electronAPI.loadData();
+console.log(data);
 queueList.innerHTML = '';
-for (const itemName of data.queue){
+for (const itemName of data.queue) {
   addItemToQueue(itemName);
 }
 
@@ -48,7 +49,7 @@ addButton.addEventListener('click', () => {
   itemInput.focus();
 });
 
-itemInput.addEventListener('keypress', function(e) {
+itemInput.addEventListener('keypress', function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
     addButton.click();
