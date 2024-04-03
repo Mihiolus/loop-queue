@@ -3,5 +3,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    addQueue: (itemName) => ipcRenderer.send('add-queue', itemName)
+    addQueue: (itemName) => ipcRenderer.send('add-queue', itemName),
+    loadData: () => ipcRenderer.invoke('loadData')
 })

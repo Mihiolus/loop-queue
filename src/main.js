@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const folder_path = app.getPath("documents");
 const data = {
-  queue: [],
+  queue: ["Art", "Programming", "Quechua"],
   plan: []
 };
 const file_path = path.join(folder_path, "./loop-queue-data.json")
@@ -40,11 +40,16 @@ const createWindow = () => {
   }
 };
 
+async function handleLoadData() {
+  return data;
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   ipcMain.on('add-queue', handleAddToQueue);
+  ipcMain.handle('loadData', handleLoadData);
   createWindow();
 });
 

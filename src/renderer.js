@@ -35,9 +35,27 @@ const itemInput = document.querySelector('input')
 const addButton = document.querySelector('button')
 const planList = document.querySelector('#plan ol')
 
+const data = await window.electronAPI.loadData();
+queueList.innerHTML = '';
+for (const itemName of data.queue){
+  addItemToQueue(itemName);
+}
+
 addButton.addEventListener('click', () => {
   let itemName = itemInput.value;
   itemInput.value = '';
+  addItemToQueue(itemName);
+  itemInput.focus();
+});
+
+itemInput.addEventListener('keypress', function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addButton.click();
+  }
+})
+
+function addItemToQueue(itemName) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
   let button = document.createElement('button');
@@ -52,14 +70,6 @@ addButton.addEventListener('click', () => {
     planList.appendChild(planItem);
 
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
-  })
-  itemInput.focus();
+  });
   window.electronAPI.addQueue(itemName);
-});
-
-itemInput.addEventListener('keypress', function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    addButton.click();
-  }
-})
+}
