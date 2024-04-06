@@ -16,6 +16,11 @@ function handleAddToQueue(event, itemName) {
   fs.writeFileSync(file_path, JSON.stringify(data));
 }
 
+function handleAddToPlan(event, itemName) {
+  data.plan.push(itemName);
+  fs.writeFileSync(file_path, JSON.stringify(data));
+}
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -46,6 +51,7 @@ async function handleLoadData() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   ipcMain.on('add-queue', handleAddToQueue);
+  ipcMain.on('add-plan', handleAddToPlan);
   ipcMain.handle('loadData', handleLoadData);
   createWindow();
 });

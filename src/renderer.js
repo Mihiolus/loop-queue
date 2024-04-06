@@ -71,7 +71,7 @@ function addItemToQueue(itemName) {
   button.textContent = "→";
   button.addEventListener('click', () => {
     addItemToPlan(itemName);
-
+    window.electronAPI.addToPlan(itemName);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
 }
