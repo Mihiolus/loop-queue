@@ -46,6 +46,7 @@ addButton.addEventListener('click', () => {
   let itemName = itemInput.value;
   itemInput.value = '';
   addItemToQueue(itemName);
+  window.electronAPI.addQueue(itemName);
   itemInput.focus();
 });
 
@@ -72,5 +73,4 @@ function addItemToQueue(itemName) {
 
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
-  window.electronAPI.addQueue(itemName);
 }
