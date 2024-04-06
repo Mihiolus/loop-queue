@@ -36,7 +36,6 @@ const addButton = document.querySelector('button')
 const planList = document.querySelector('#plan ol')
 
 const data = await window.electronAPI.loadData();
-console.log(data);
 queueList.innerHTML = '';
 for (const itemName of data.queue) {
   addItemToQueue(itemName);
@@ -63,17 +62,26 @@ itemInput.addEventListener('keypress', function (e) {
 function addItemToQueue(itemName) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
-  let button = document.createElement('button');
+  let planButton = document.createElement('button');
+  let deleteButton = document.createElement('button');
   queueItem.appendChild(span);
-  queueItem.appendChild(button);
+  queueItem.appendChild(planButton);
+  queueItem.appendChild(deleteButton);
   span.textContent = itemName;
   queueList.appendChild(queueItem);
-  button.textContent = "→";
-  button.addEventListener('click', () => {
+  planButton.textContent = "→";
+  planButton.addEventListener('click', () => {
     addItemToPlan(itemName);
     window.electronAPI.addToPlan(itemName);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
+  deleteButton.textContent = "x";
+  deleteButton.addEventListener('click', () => {
+    const queueArray = Array.from(queueList.children);
+    const itemIndex = queueArray.indexOf(queueItem);
+    queueItem.remove();
+    window.electronAPI.deleteItem(itemIndex);
+  })
 }
 function addItemToPlan(itemName) {
   const planItem = document.createElement('li');

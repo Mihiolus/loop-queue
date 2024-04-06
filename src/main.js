@@ -21,6 +21,11 @@ function handleAddToPlan(event, itemName) {
   fs.writeFileSync(file_path, JSON.stringify(data));
 }
 
+function handleDeleteItem(event, indexInQueue) {
+  data.queue.splice(indexInQueue, 1);
+  fs.writeFileSync(file_path, JSON.stringify(data));
+}
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -52,6 +57,7 @@ async function handleLoadData() {
 app.on('ready', () => {
   ipcMain.on('add-queue', handleAddToQueue);
   ipcMain.on('add-plan', handleAddToPlan);
+  ipcMain.on('delete', handleDeleteItem);
   ipcMain.handle('loadData', handleLoadData);
   createWindow();
 });
