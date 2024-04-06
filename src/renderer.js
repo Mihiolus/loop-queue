@@ -41,6 +41,9 @@ queueList.innerHTML = '';
 for (const itemName of data.queue) {
   addItemToQueue(itemName);
 }
+for (const itemName of data.plan) {
+  addItemToPlan(itemName);
+}
 
 addButton.addEventListener('click', () => {
   let itemName = itemInput.value;
@@ -67,10 +70,14 @@ function addItemToQueue(itemName) {
   queueList.appendChild(queueItem);
   button.textContent = "→";
   button.addEventListener('click', () => {
-    const planItem = document.createElement('li');
-    planItem.textContent = itemName;
-    planList.appendChild(planItem);
+    addItemToPlan(itemName);
 
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
 }
+function addItemToPlan(itemName) {
+  const planItem = document.createElement('li');
+  planItem.textContent = itemName;
+  planList.appendChild(planItem);
+}
+
