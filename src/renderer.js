@@ -77,8 +77,7 @@ function addItemToQueue(itemName) {
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
-    const queueArray = Array.from(queueList.children);
-    const itemIndex = queueArray.indexOf(queueItem);
+    const itemIndex = getItemIndex(queueItem);
     queueItem.remove();
     window.electronAPI.deleteItem(itemIndex);
   })
@@ -90,8 +89,11 @@ function addItemToQueue(itemName) {
     span.replaceWith(textField);
     textField.select();
     textField.addEventListener("blur", () => {
-      span.textContent = textField.value;
+      const newName = textField.value;
+      span.textContent = newName;
       textField.replaceWith(span);
+      const itemIndex = getItemIndex(queueItem);
+      window.electronAPI.renameItem(itemIndex, newName);
     });
     textField.addEventListener('keypress', (e) => {
       if (e.key === "Enter") {
@@ -101,6 +103,12 @@ function addItemToQueue(itemName) {
     })
   })
 }
+function getItemIndex(queueItem) {
+  const queueArray = Array.from(queueList.children);
+  const itemIndex = queueArray.indexOf(queueItem);
+  return itemIndex;
+}
+
 function addItemToPlan(itemName) {
   const planItem = document.createElement('li');
   planItem.textContent = itemName;

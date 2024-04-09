@@ -23,7 +23,7 @@ function handleAddToPlan(event, itemName) {
 
 function handleDeleteItem(event, indexInQueue) {
   data.queue.splice(indexInQueue, 1);
-  fs.writeFileSync(file_path, JSON.stringify(data));
+  saveData();
 }
 
 const createWindow = () => {
@@ -44,11 +44,20 @@ const createWindow = () => {
   }
 };
 
+function saveData() {
+  fs.writeFileSync(file_path, JSON.stringify(data));
+}
+
 async function handleLoadData() {
   const read_data = JSON.parse(fs.readFileSync(file_path, { encoding: 'utf-8'}));
   data.queue = read_data.queue;
   data.plan = read_data.plan;
   return data;
+}
+
+function handleRenameItem (event, itemindex, newName){
+  data.queue[itemindex] = newName;
+  saveData();
 }
 
 // This method will be called when Electron has finished
@@ -58,6 +67,7 @@ app.on('ready', () => {
   ipcMain.on('add-queue', handleAddToQueue);
   ipcMain.on('add-plan', handleAddToPlan);
   ipcMain.on('delete', handleDeleteItem);
+  ipcMain.on('rename-item', handleRenameItem);
   ipcMain.handle('loadData', handleLoadData);
   createWindow();
 });
