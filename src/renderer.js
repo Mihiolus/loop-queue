@@ -82,6 +82,18 @@ function addItemToQueue(itemName) {
     queueItem.remove();
     window.electronAPI.deleteItem(itemIndex);
   })
+  span.addEventListener('dblclick', () => {
+    const textField = document.createElement("input");
+    textField.type = "text";
+    textField.value = span.textContent;
+    textField.focus();
+    span.replaceWith(textField);
+    textField.select();
+    textField.addEventListener("blur", () => {
+      span.textContent = textField.value;
+      textField.replaceWith(span);
+    });
+  })
 }
 function addItemToPlan(itemName) {
   const planItem = document.createElement('li');
