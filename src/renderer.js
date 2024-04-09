@@ -93,6 +93,12 @@ function addItemToQueue(itemName) {
       span.textContent = textField.value;
       textField.replaceWith(span);
     });
+    textField.addEventListener('keypress', (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        textField.blur();
+      }
+    })
   })
 }
 function addItemToPlan(itemName) {
