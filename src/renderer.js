@@ -46,11 +46,19 @@ for (const itemName of data.plan) {
 
 addButton.addEventListener('click', () => {
   let itemName = itemInput.value;
+  if (!isNameValid(itemName)) return;
   itemInput.value = '';
   addItemToQueue(itemName);
   window.electronAPI.addQueue(itemName);
   itemInput.focus();
 });
+
+function isNameValid(itemName){
+  if (itemName === null) return false;
+  if (typeof itemName != 'string') return false;
+  if (itemName.trim().length === 0) return false;
+  return true;
+}
 
 itemInput.addEventListener('keypress', function (e) {
   if (e.key === "Enter") {
