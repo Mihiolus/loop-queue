@@ -58,7 +58,7 @@ itemInput.addEventListener('input', () => {
   addButton.disabled = !isNameValid(inputString);
 });
 
-function isNameValid(itemName){
+function isNameValid(itemName) {
   if (itemName === null) return false;
   if (typeof itemName != 'string') return false;
   if (itemName.trim().length === 0) return false;
@@ -103,10 +103,12 @@ function addItemToQueue(itemName) {
     textField.select();
     textField.addEventListener("blur", () => {
       const newName = textField.value;
-      span.textContent = newName;
       textField.replaceWith(span);
-      const itemIndex = getItemIndex(queueItem);
-      window.electronAPI.renameItem(itemIndex, newName);
+      if (isNameValid(newName)) {
+        span.textContent = newName;
+        const itemIndex = getItemIndex(queueItem);
+        window.electronAPI.renameItem(itemIndex, newName);
+      }
     });
     textField.addEventListener('keypress', (e) => {
       if (e.key === "Enter") {
