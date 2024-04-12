@@ -53,6 +53,11 @@ addButton.addEventListener('click', () => {
   itemInput.focus();
 });
 
+itemInput.addEventListener('input', () => {
+  let inputString = itemInput.value;
+  addButton.disabled = !isNameValid(inputString);
+});
+
 function isNameValid(itemName){
   if (itemName === null) return false;
   if (typeof itemName != 'string') return false;
