@@ -72,6 +72,31 @@ itemInput.addEventListener('keypress', function (e) {
   }
 })
 
+function editItem(event){
+  const sourceElement = event.target;
+  const textField = document.createElement("input");
+  textField.type = "text";
+  textField.value = sourceElement.textContent;
+  textField.focus();
+  sourceElement.replaceWith(textField);
+  textField.select();
+  textField.addEventListener("blur", () => {
+    const newName = textField.value;
+    textField.replaceWith(sourceElement);
+    if (isNameValid(newName)) {
+      sourceElement.textContent = newName;
+      const itemIndex = getItemIndex(queueItem);
+      window.electronAPI.renameItem(itemIndex, newName);
+    }
+  });
+  textField.addEventListener('keypress', (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      textField.blur();
+    }
+  })
+}
+
 function addItemToQueue(itemName) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
@@ -94,29 +119,7 @@ function addItemToQueue(itemName) {
     queueItem.remove();
     window.electronAPI.deleteItem(itemIndex);
   })
-  span.addEventListener('dblclick', () => {
-    const textField = document.createElement("input");
-    textField.type = "text";
-    textField.value = span.textContent;
-    textField.focus();
-    span.replaceWith(textField);
-    textField.select();
-    textField.addEventListener("blur", () => {
-      const newName = textField.value;
-      textField.replaceWith(span);
-      if (isNameValid(newName)) {
-        span.textContent = newName;
-        const itemIndex = getItemIndex(queueItem);
-        window.electronAPI.renameItem(itemIndex, newName);
-      }
-    });
-    textField.addEventListener('keypress', (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        textField.blur();
-      }
-    })
-  })
+  span.addEventListener('dblclick', editItem);
 }
 function getItemIndex(queueItem) {
   const queueArray = Array.from(queueList.children);
@@ -128,5 +131,6 @@ function addItemToPlan(itemName) {
   const planItem = document.createElement('li');
   planItem.textContent = itemName;
   planList.appendChild(planItem);
+  planItem.addEventListener('dblclick', editItem);
 }
 
