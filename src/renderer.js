@@ -72,7 +72,7 @@ itemInput.addEventListener('keypress', function (e) {
   }
 })
 
-function editItem(event){
+function editItem(event) {
   const sourceElement = event.target;
   const textField = document.createElement("input");
   textField.type = "text";
@@ -121,6 +121,7 @@ function addItemToQueue(itemName) {
   })
   span.addEventListener('dblclick', editItem);
 }
+
 function getItemIndex(queueItem) {
   const queueArray = Array.from(queueList.children);
   const itemIndex = queueArray.indexOf(queueItem);
@@ -129,8 +130,10 @@ function getItemIndex(queueItem) {
 
 function addItemToPlan(itemName) {
   const planItem = document.createElement('li');
-  planItem.textContent = itemName;
+  const span = document.createElement('span');
+  planItem.appendChild(span);
+  span.textContent = itemName;
   planList.appendChild(planItem);
-  planItem.addEventListener('dblclick', editItem);
+  span.addEventListener('dblclick', editItem);
 }
 
