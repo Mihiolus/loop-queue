@@ -27,6 +27,7 @@
  */
 
 import './index.css';
+import uuid4 from 'uuid4';
 
 const queueList = document.querySelector('#queue ol')
 const itemInput = document.querySelector('input')
@@ -37,6 +38,20 @@ const data = await window.electronAPI.loadData();
 updateQueue();
 updatePlan();
 
+const newItemForm = document.querySelector('form');
+
+newItemForm.addEventListener('submit', e => {
+  e.preventDefault();
+  let itemName = itemInput.value;
+  let newItem = { id: uuid4(), name: itemName };
+  itemInput.value = '';
+  itemInput.focus();
+  const event = new Event('input');
+  itemInput.dispatchEvent(event);
+  data.queue.push(newItem);
+  updateQueue();
+})/* 
+
 addButton.addEventListener('click', () => {
   let itemName = itemInput.value;
   if (!isNameValid(itemName)) return;
@@ -44,7 +59,7 @@ addButton.addEventListener('click', () => {
   addItemToQueue(itemName);
   window.electronAPI.addQueue(itemName);
   itemInput.focus();
-});
+}); */
 
 itemInput.addEventListener('input', () => {
   let inputString = itemInput.value;
@@ -74,14 +89,14 @@ function isNameValid(itemName) {
   if (typeof itemName != 'string') return false;
   if (itemName.trim().length === 0) return false;
   return true;
-}
+}/* 
 
 itemInput.addEventListener('keypress', function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
     addButton.click();
   }
-})
+}) */
 
 function editItem(event) {
   const sourceElement = event.target;
@@ -108,7 +123,7 @@ function editItem(event) {
   })
 }
 
-function createQueueItem(itemName) {
+function createQueueItem(item) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
   let planButton = document.createElement('button');
@@ -116,11 +131,11 @@ function createQueueItem(itemName) {
   queueItem.appendChild(span);
   queueItem.appendChild(planButton);
   queueItem.appendChild(deleteButton);
-  span.textContent = itemName;
+  span.textContent = item.name;
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
-    addItemToPlan(itemName);
-    window.electronAPI.addToPlan(itemName);
+    addItemToPlan(item);
+    window.electronAPI.addToPlan(item);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
   deleteButton.textContent = "x";
@@ -133,7 +148,7 @@ function createQueueItem(itemName) {
   return queueItem;
 }
 
-function addItemToQueue(itemName) {
+function addItemToQueue(item) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
   let planButton = document.createElement('button');
@@ -141,12 +156,12 @@ function addItemToQueue(itemName) {
   queueItem.appendChild(span);
   queueItem.appendChild(planButton);
   queueItem.appendChild(deleteButton);
-  span.textContent = itemName;
+  span.textContent = item;
   queueList.appendChild(queueItem);
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
-    addItemToPlan(itemName);
-    window.electronAPI.addToPlan(itemName);
+    addItemToPlan(item);
+    window.electronAPI.addToPlan(item);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
   deleteButton.textContent = "x";
@@ -164,11 +179,11 @@ function getItemIndex(queueItem) {
   return itemIndex;
 }
 
-function createPlanItem(itemName) {
+function createPlanItem(item) {
   const planItem = document.createElement('li');
   const span = document.createElement('span');
   planItem.appendChild(span);
-  span.textContent = itemName;
+  span.textContent = item.name;
   span.addEventListener('dblclick', editItem);
   return planItem;
 }
