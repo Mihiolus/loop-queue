@@ -169,7 +169,6 @@ function createPlanItem(item) {
   const span = document.createElement('span');
   planItem.appendChild(span);
   span.textContent = item.name;
-  span.addEventListener('dblclick', editItem);
   return planItem;
 }
 
@@ -179,6 +178,5 @@ function addItemToPlan(itemName) {
   planItem.appendChild(span);
   span.textContent = itemName;
   planList.appendChild(planItem);
-  span.addEventListener('dblclick', editItem);
 }
 
