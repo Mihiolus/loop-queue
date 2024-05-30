@@ -121,7 +121,10 @@ function createQueueItem(item) {
   planButton.addEventListener('click', () => {
     addItemToPlan(item);
     // window.electronAPI.addToPlan(item);
-    queueList.insertBefore(queueItem, queueList.childNodes[0]);
+    const len = data.queue.length;
+    data.queue.splice(len - 1, 1);
+    data.queue.unshift(item);
+    updateQueue();
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
