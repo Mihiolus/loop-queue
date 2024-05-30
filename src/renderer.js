@@ -89,14 +89,7 @@ function isNameValid(itemName) {
   if (typeof itemName != 'string') return false;
   if (itemName.trim().length === 0) return false;
   return true;
-}/* 
-
-itemInput.addEventListener('keypress', function (e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    addButton.click();
-  }
-}) */
+}
 
 function editItem(event) {
   const sourceElement = event.target;
