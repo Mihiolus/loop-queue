@@ -37,7 +37,8 @@ const createWindow = () => {
     show: false,
   });
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow.show();
+    mainWindow.maximize();
   });
 
   // and load the index.html of the app.
