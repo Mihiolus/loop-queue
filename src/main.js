@@ -1,29 +1,13 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs');
+import { readFile, writeFile } from 'fs/promises';
 
 const folder_path = app.getPath("documents");
-const data = { queue: [], plan: [] };
 const file_path = path.join(folder_path, "./loop-queue-data.json")
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
-}
-
-function handleAddToQueue(event, itemName) {
-  data.queue.push(itemName);
-  fs.writeFileSync(file_path, JSON.stringify(data));
-}
-
-function handleAddToPlan(event, itemName) {
-  data.plan.push(itemName);
-  fs.writeFileSync(file_path, JSON.stringify(data));
-}
-
-function handleDeleteItem(event, indexInQueue) {
-  data.queue.splice(indexInQueue, 1);
-  saveData();
 }
 
 const createWindow = () => {
@@ -51,30 +35,11 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-function saveData() {
-  fs.writeFileSync(file_path, JSON.stringify(data));
-}
-
-async function handleLoadData() {
-  const read_data = JSON.parse(fs.readFileSync(file_path, { encoding: 'utf-8'}));
-  data.queue = read_data.queue;
-  data.plan = read_data.plan;
-  return data;
-}
-
-function handleRenameItem (event, itemindex, newName){
-  data.queue[itemindex] = newName;
-  saveData();
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  ipcMain.on('add-queue', handleAddToQueue);
-  ipcMain.on('add-plan', handleAddToPlan);
-  ipcMain.on('delete', handleDeleteItem);
-  ipcMain.on('rename-item', handleRenameItem);
+  ipcMain.on('save-data', handleSaveData);
   ipcMain.handle('loadData', handleLoadData);
   createWindow();
 });
@@ -98,3 +63,20 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+async function handleSaveData(_event, data){
+  try{
+    await writeFile(file_path, data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function handleLoadData() {
+  try{
+    const fileContents = await readFile(file_path, { encoding: 'utf-8'});
+    return JSON.parse(fileContents);
+  } catch (err){
+    console.error( err);
+    return { queue: [], plan: [] };
+  }
+}

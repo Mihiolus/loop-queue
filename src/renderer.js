@@ -49,17 +49,9 @@ newItemForm.addEventListener('submit', e => {
   const event = new Event('input');
   itemInput.dispatchEvent(event);
   data.queue.push(newItem);
+  window.electronAPI.saveData(data);
   updateQueue();
-})/* 
-
-addButton.addEventListener('click', () => {
-  let itemName = itemInput.value;
-  if (!isNameValid(itemName)) return;
-  itemInput.value = '';
-  addItemToQueue(itemName);
-  window.electronAPI.addQueue(itemName);
-  itemInput.focus();
-}); */
+})
 
 itemInput.addEventListener('input', () => {
   let inputString = itemInput.value;
@@ -105,7 +97,7 @@ function editItem(event) {
     if (isNameValid(newName)) {
       sourceElement.textContent = newName;
       const itemIndex = getItemIndex(queueItem);
-      window.electronAPI.renameItem(itemIndex, newName);
+      // window.electronAPI.renameItem(itemIndex, newName);
     }
   });
   textField.addEventListener('keypress', (e) => {
@@ -128,14 +120,14 @@ function createQueueItem(item) {
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
     addItemToPlan(item);
-    window.electronAPI.addToPlan(item);
+    // window.electronAPI.addToPlan(item);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
     const itemIndex = getItemIndex(queueItem);
     queueItem.remove();
-    window.electronAPI.deleteItem(itemIndex);
+    // window.electronAPI.deleteItem(itemIndex);
   })
   span.addEventListener('dblclick', editItem);
   return queueItem;
@@ -154,14 +146,14 @@ function addItemToQueue(item) {
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
     addItemToPlan(item);
-    window.electronAPI.addToPlan(item);
+    // window.electronAPI.addToPlan(item);
     queueList.insertBefore(queueItem, queueList.childNodes[0]);
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
     const itemIndex = getItemIndex(queueItem);
     queueItem.remove();
-    window.electronAPI.deleteItem(itemIndex);
+    // window.electronAPI.deleteItem(itemIndex);
   })
   span.addEventListener('dblclick', editItem);
 }
