@@ -42,7 +42,7 @@ const newItemForm = document.querySelector('form');
 
 newItemForm.addEventListener('submit', e => {
   e.preventDefault();
-  let itemName = itemInput.value;
+  let itemName = itemInput.value.trim();
   let newItem = { id: uuid4(), name: itemName };
   itemInput.value = '';
   itemInput.focus();
