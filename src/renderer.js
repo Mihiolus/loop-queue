@@ -133,31 +133,6 @@ function createQueueItem(item) {
   return queueItem;
 }
 
-function addItemToQueue(item) {
-  let queueItem = document.createElement('li');
-  let span = document.createElement('span');
-  let planButton = document.createElement('button');
-  let deleteButton = document.createElement('button');
-  queueItem.appendChild(span);
-  queueItem.appendChild(planButton);
-  queueItem.appendChild(deleteButton);
-  span.textContent = item;
-  queueList.appendChild(queueItem);
-  planButton.textContent = "→";
-  planButton.addEventListener('click', () => {
-    addItemToPlan(item);
-    // window.electronAPI.addToPlan(item);
-    queueList.insertBefore(queueItem, queueList.childNodes[0]);
-  });
-  deleteButton.textContent = "x";
-  deleteButton.addEventListener('click', () => {
-    const itemIndex = getItemIndex(queueItem);
-    queueItem.remove();
-    // window.electronAPI.deleteItem(itemIndex);
-  })
-  span.addEventListener('dblclick', editItem);
-}
-
 function getItemIndex(queueItem) {
   const queueArray = Array.from(queueList.children);
   const itemIndex = queueArray.indexOf(queueItem);
