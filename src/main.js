@@ -65,7 +65,7 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 async function handleSaveData(_event, data){
   try{
-    await writeFile(file_path, data);
+    await writeFile(file_path, JSON.stringify(data));
   } catch (err) {
     console.error(err);
   }
