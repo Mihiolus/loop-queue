@@ -96,7 +96,7 @@ editingField.addEventListener("blur", () => {
     cancelItemEdit();
   }
 });
-editingField.addEventListener('keypress', (e) => {
+editingField.addEventListener('keydown', (e) => {
   if (e.key === "Enter") {
     console.log("Enter pressed");
     e.preventDefault();
