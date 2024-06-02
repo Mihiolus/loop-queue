@@ -98,10 +98,13 @@ editingField.addEventListener("blur", () => {
 });
 editingField.addEventListener('keypress', (e) => {
   if (e.key === "Enter") {
+    console.log("Enter pressed");
     e.preventDefault();
     const newName = editingField.value;
     if (isNameValid(newName)){
       acceptItemEdit();
+    }else{
+      editingField.placeholder = "Enter a valid name";
     }
   }else if (e.key === "Escape") {
     console.log("Escape pressed");
@@ -116,14 +119,16 @@ function acceptItemEdit() {
   const editedItem = data.queue.find((item) => item.id == itemid);
   editedItem.name = newName;
   editedSpan.textContent = newName;
-  const temp = editedSpan
+  const temp = editedSpan;
   editedSpan = null;
   editingField.replaceWith(temp);
+  editingField.placeholder = "";
   window.electronAPI.saveData(data);
 }
 function cancelItemEdit() {
   console.log("Cancel item edit");
   editingField.replaceWith(editedSpan);
+  editingField.placeholder = "";
   editedSpan = null;
 }
 
