@@ -87,7 +87,6 @@ const editingField = document.createElement("input");
 let editedSpan = null;
 editingField.type = "text";
 editingField.addEventListener("blur", () => {
-  console.log("Blur fired");
   if (!editedSpan) return;
   const newName = editingField.value;
   if (isNameValid(newName)) {
@@ -98,7 +97,6 @@ editingField.addEventListener("blur", () => {
 });
 editingField.addEventListener('keydown', (e) => {
   if (e.key === "Enter") {
-    console.log("Enter pressed");
     e.preventDefault();
     const newName = editingField.value;
     if (isNameValid(newName)){
@@ -107,13 +105,11 @@ editingField.addEventListener('keydown', (e) => {
       editingField.placeholder = "Enter a valid name";
     }
   }else if (e.key === "Escape") {
-    console.log("Escape pressed");
     e.preventDefault();
     cancelItemEdit();
   }
 })
 function acceptItemEdit() {
-  console.log("Accept item edit");
   const newName = editingField.value.trim();
   const itemid = editedSpan.dataset.itemid;
   const editedItem = data.queue.find((item) => item.id == itemid);
@@ -126,7 +122,6 @@ function acceptItemEdit() {
   window.electronAPI.saveData(data);
 }
 function cancelItemEdit() {
-  console.log("Cancel item edit");
   editingField.placeholder = "";
   const temp = editedSpan;
   editedSpan = null;
