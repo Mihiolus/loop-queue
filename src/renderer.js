@@ -127,9 +127,10 @@ function acceptItemEdit() {
 }
 function cancelItemEdit() {
   console.log("Cancel item edit");
-  editingField.replaceWith(editedSpan);
   editingField.placeholder = "";
+  const temp = editedSpan;
   editedSpan = null;
+  editingField.replaceWith(temp);
 }
 
 function editItem(event) {
