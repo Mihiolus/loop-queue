@@ -83,29 +83,56 @@ function isNameValid(itemName) {
   return true;
 }
 
+const editingField = document.createElement("input");
+let editedSpan = null;
+editingField.type = "text";
+editingField.addEventListener("blur", () => {
+  console.log("Blur fired");
+  if (!editedSpan) return;
+  const newName = editingField.value;
+  if (isNameValid(newName)) {
+    acceptItemEdit();
+  }else{
+    cancelItemEdit();
+  }
+});
+editingField.addEventListener('keypress', (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const newName = editingField.value;
+    if (isNameValid(newName)){
+      acceptItemEdit();
+    }
+  }else if (e.key === "Escape") {
+    console.log("Escape pressed");
+    e.preventDefault();
+    cancelItemEdit();
+  }
+})
+function acceptItemEdit() {
+  console.log("Accept item edit");
+  const newName = editingField.value.trim();
+  const itemid = editedSpan.dataset.itemid;
+  const editedItem = data.queue.find((item) => item.id == itemid);
+  editedItem.name = newName;
+  editedSpan.textContent = newName;
+  const temp = editedSpan
+  editedSpan = null;
+  editingField.replaceWith(temp);
+  window.electronAPI.saveData(data);
+}
+function cancelItemEdit() {
+  console.log("Cancel item edit");
+  editingField.replaceWith(editedSpan);
+  editedSpan = null;
+}
+
 function editItem(event) {
-  const sourceElement = event.target;
-  const textField = document.createElement("input");
-  textField.type = "text";
-  textField.value = sourceElement.textContent;
-  textField.focus();
-  sourceElement.replaceWith(textField);
-  textField.select();
-  textField.addEventListener("blur", () => {
-    const newName = textField.value;
-    textField.replaceWith(sourceElement);
-    if (isNameValid(newName)) {
-      sourceElement.textContent = newName;
-      const itemIndex = getItemIndex(queueItem);
-      // window.electronAPI.renameItem(itemIndex, newName);
-    }
-  });
-  textField.addEventListener('keypress', (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      textField.blur();
-    }
-  })
+  editedSpan = event.target;
+  editingField.value = editedSpan.textContent;
+  editedSpan.replaceWith(editingField);
+  editingField.focus();
+  editingField.select();
 }
 
 function createQueueItem(item) {
@@ -117,6 +144,7 @@ function createQueueItem(item) {
   queueItem.appendChild(planButton);
   queueItem.appendChild(deleteButton);
   span.textContent = item.name;
+  span.dataset.itemid = item.id;
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
     addItemToPlan(item);
