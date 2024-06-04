@@ -59,6 +59,12 @@ itemInput.addEventListener('input', () => {
   addButton.disabled = !isNameValid(inputString);
 });
 
+historyLimitField.addEventListener('change', () => {
+  if (!historyLimitField.checkValidity()) {
+    historyLimitField.value = historyLimitField.dataset.oldValue;
+  }
+})
+
 function updateQueue() {
   queueNode.innerHTML = '';
   const fragment = document.createDocumentFragment();
