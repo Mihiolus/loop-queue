@@ -29,14 +29,14 @@
 import './index.css';
 import uuid4 from 'uuid4';
 
-const queueList = document.querySelector('#queue ol')
+const queueNode = document.querySelector('#queue ol')
 const itemInput = document.querySelector('input')
 const addButton = document.querySelector('button')
-const planList = document.querySelector('#plan ol')
+const historyNode = document.querySelector('#history ol')
 
 const data = await window.electronAPI.loadData();
 updateQueue();
-updatePlan();
+updateHistory();
 
 const newItemForm = document.querySelector('form');
 
@@ -59,21 +59,21 @@ itemInput.addEventListener('input', () => {
 });
 
 function updateQueue() {
-  queueList.innerHTML = '';
+  queueNode.innerHTML = '';
   const fragment = document.createDocumentFragment();
   for (const queueItem of data.queue) {
     fragment.appendChild(createQueueItem(queueItem));
   }
-  queueList.appendChild(fragment);
+  queueNode.appendChild(fragment);
 }
 
-function updatePlan() {
-  planList.innerHTML = '';
+function updateHistory() {
+  historyNode.innerHTML = '';
   const fragment = document.createDocumentFragment();
-  for (const planItem of data.plan) {
-    fragment.appendChild(createPlanItem(planItem));
+  for (const historyItem of data.history) {
+    fragment.appendChild(createHistoryItem(historyItem));
   }
-  planList.appendChild(fragment);
+  historyNode.appendChild(fragment);
 }
 
 function isNameValid(itemName) {
@@ -139,19 +139,19 @@ function editItem(event) {
 function createQueueItem(item) {
   let queueItem = document.createElement('li');
   let span = document.createElement('span');
-  let planButton = document.createElement('button');
+  let historyButton = document.createElement('button');
   let deleteButton = document.createElement('button');
   queueItem.appendChild(span);
-  queueItem.appendChild(planButton);
+  queueItem.appendChild(historyButton);
   queueItem.appendChild(deleteButton);
   span.textContent = item.name;
   span.dataset.itemid = item.id;
-  planButton.textContent = "→";
-  planButton.addEventListener('click', () => {
-    const newPlanItem = { name: item.name };
-    data.plan.push(newPlanItem);
+  historyButton.textContent = "→";
+  historyButton.addEventListener('click', () => {
+    const newHistoryItem = { name: item.name };
+    data.history.push(newHistoryItem);
     window.electronAPI.saveData(data);
-    updatePlan();
+    updateHistory();
     const itemIndex = data.queue.indexOf(item);
     data.queue.splice(itemIndex, 1);
     data.queue.unshift(item);
@@ -168,15 +168,15 @@ function createQueueItem(item) {
 }
 
 function getItemIndex(queueItem) {
-  const queueArray = Array.from(queueList.children);
+  const queueArray = Array.from(queueNode.children);
   const itemIndex = queueArray.indexOf(queueItem);
   return itemIndex;
 }
 
-function createPlanItem(item) {
-  const planItem = document.createElement('li');
+function createHistoryItem(item) {
+  const historyItem = document.createElement('li');
   const span = document.createElement('span');
-  planItem.appendChild(span);
+  historyItem.appendChild(span);
   span.textContent = item.name;
-  return planItem;
+  return historyItem;
 }
