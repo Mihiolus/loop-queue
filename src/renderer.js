@@ -33,6 +33,7 @@ const queueNode = document.querySelector('#queue ol')
 const itemInput = document.querySelector('input')
 const addButton = document.querySelector('button')
 const historyNode = document.querySelector('#history ol')
+const historyLimitField = document.querySelector('#history-limit')
 
 const data = await window.electronAPI.loadData();
 updateQueue();
@@ -150,6 +151,10 @@ function createQueueItem(item) {
   historyButton.addEventListener('click', () => {
     const newHistoryItem = { name: item.name };
     data.history.push(newHistoryItem);
+    const limit = historyLimitField.value;
+    while (data.history.length > limit) {
+      data.history.splice(0, 1);
+    }
     window.electronAPI.saveData(data);
     updateHistory();
     const itemIndex = data.queue.indexOf(item);
