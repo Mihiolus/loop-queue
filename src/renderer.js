@@ -61,8 +61,8 @@ itemInput.addEventListener('input', () => {
 function updateQueue() {
   queueList.innerHTML = '';
   const fragment = document.createDocumentFragment();
-  for (const itemName of data.queue) {
-    fragment.appendChild(createQueueItem(itemName));
+  for (const queueItem of data.queue) {
+    fragment.appendChild(createQueueItem(queueItem));
   }
   queueList.appendChild(fragment);
 }
@@ -70,8 +70,8 @@ function updateQueue() {
 function updatePlan() {
   planList.innerHTML = '';
   const fragment = document.createDocumentFragment();
-  for (const itemName of data.plan) {
-    fragment.appendChild(createPlanItem(itemName));
+  for (const planItem of data.plan) {
+    fragment.appendChild(createPlanItem(planItem));
   }
   planList.appendChild(fragment);
 }
@@ -148,7 +148,8 @@ function createQueueItem(item) {
   span.dataset.itemid = item.id;
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
-    data.plan.push(item);
+    const newPlanItem = { name: item.name };
+    data.plan.push(newPlanItem);
     window.electronAPI.saveData(data);
     updatePlan();
     const itemIndex = data.queue.indexOf(item);
