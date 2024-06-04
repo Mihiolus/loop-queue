@@ -60,7 +60,7 @@ itemInput.addEventListener('input', () => {
 
 function updateQueue() {
   queueList.innerHTML = '';
-  const fragment = document.createDocumentFragment();  
+  const fragment = document.createDocumentFragment();
   for (const itemName of data.queue) {
     fragment.appendChild(createQueueItem(itemName));
   }
@@ -91,7 +91,7 @@ editingField.addEventListener("blur", () => {
   const newName = editingField.value;
   if (isNameValid(newName)) {
     acceptItemEdit();
-  }else{
+  } else {
     cancelItemEdit();
   }
 });
@@ -99,12 +99,12 @@ editingField.addEventListener('keydown', (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     const newName = editingField.value;
-    if (isNameValid(newName)){
+    if (isNameValid(newName)) {
       acceptItemEdit();
-    }else{
+    } else {
       editingField.placeholder = "Enter a valid name";
     }
-  }else if (e.key === "Escape") {
+  } else if (e.key === "Escape") {
     e.preventDefault();
     cancelItemEdit();
   }
@@ -148,18 +148,19 @@ function createQueueItem(item) {
   span.dataset.itemid = item.id;
   planButton.textContent = "→";
   planButton.addEventListener('click', () => {
-    addItemToPlan(item);
-    // window.electronAPI.addToPlan(item);
-    const len = data.queue.length;
-    data.queue.splice(len - 1, 1);
+    data.plan.push(item);
+    window.electronAPI.saveData(data);
+    updatePlan();
+    const itemIndex = data.queue.indexOf(item);
+    data.queue.splice(itemIndex, 1);
     data.queue.unshift(item);
     updateQueue();
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
-    const itemIndex = getItemIndex(queueItem);
-    queueItem.remove();
-    // window.electronAPI.deleteItem(itemIndex);
+    const itemIndex = data.queue.indexOf(item);
+    data.queue.splice(itemIndex, 1);
+    window.electronAPI.saveData(data);
   })
   span.addEventListener('dblclick', editItem);
   return queueItem;
@@ -178,12 +179,3 @@ function createPlanItem(item) {
   span.textContent = item.name;
   return planItem;
 }
-
-function addItemToPlan(itemName) {
-  const planItem = document.createElement('li');
-  const span = document.createElement('span');
-  planItem.appendChild(span);
-  span.textContent = itemName;
-  planList.appendChild(planItem);
-}
-
