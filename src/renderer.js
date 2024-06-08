@@ -65,6 +65,7 @@ historyLimitField.addEventListener('change', () => {
   } else {
     historyLimitField.value = historyLimitField.dataset.oldValue;
   }
+  trimHistory();
 })
 
 function repaintQueue() {
@@ -160,10 +161,7 @@ function createQueueItem(item) {
   historyButton.addEventListener('click', () => {
     const newHistoryItem = { name: item.name };
     data.history.push(newHistoryItem);
-    const limit = historyLimitField.value;
-    data.history.splice(0, data.history.length - limit);
-    window.electronAPI.saveData(data);
-    repaintHistory();
+    trimHistory();
     const itemIndex = data.queue.indexOf(item);
     data.queue.splice(itemIndex, 1);
     data.queue.unshift(item);
@@ -177,6 +175,13 @@ function createQueueItem(item) {
   })
   span.addEventListener('dblclick', editItem);
   return queueItem;
+}
+
+function trimHistory() {
+  const limit = historyLimitField.value;
+  data.history.splice(0, data.history.length - limit);
+  window.electronAPI.saveData(data);
+  repaintHistory();
 }
 
 function createHistoryItem(item) {
