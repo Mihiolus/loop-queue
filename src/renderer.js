@@ -60,7 +60,7 @@ itemInput.addEventListener('input', () => {
 });
 
 historyLimitField.addEventListener('change', () => {
-  if (historyLimitField.checkValidity()){
+  if (historyLimitField.checkValidity()) {
     historyLimitField.dataset.oldValue = historyLimitField.value;
   } else {
     historyLimitField.value = historyLimitField.dataset.oldValue;
@@ -161,9 +161,7 @@ function createQueueItem(item) {
     const newHistoryItem = { name: item.name };
     data.history.push(newHistoryItem);
     const limit = historyLimitField.value;
-    while (data.history.length > limit) {
-      data.history.splice(0, 1);
-    }
+    data.history.splice(0, data.history.length - limit);
     window.electronAPI.saveData(data);
     updateHistory();
     const itemIndex = data.queue.indexOf(item);
