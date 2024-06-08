@@ -60,7 +60,9 @@ itemInput.addEventListener('input', () => {
 });
 
 historyLimitField.addEventListener('change', () => {
-  if (!historyLimitField.checkValidity()) {
+  if (historyLimitField.checkValidity()){
+    historyLimitField.dataset.oldValue = historyLimitField.value;
+  } else {
     historyLimitField.value = historyLimitField.dataset.oldValue;
   }
 })
