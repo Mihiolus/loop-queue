@@ -38,6 +38,7 @@ const historyLimitField = document.querySelector('#history-limit')
 const data = await window.electronAPI.loadData();
 repaintQueue();
 repaintHistory();
+historyLimitField.value = data.historyLimit;
 
 const newItemForm = document.querySelector('form');
 
@@ -61,9 +62,9 @@ itemInput.addEventListener('input', () => {
 
 historyLimitField.addEventListener('change', () => {
   if (historyLimitField.checkValidity()) {
-    historyLimitField.dataset.oldValue = historyLimitField.value;
+    data.historyLimit = historyLimitField.value;
   } else {
-    historyLimitField.value = historyLimitField.dataset.oldValue;
+    historyLimitField.value = data.historyLimit;
   }
   trimHistory();
 })
@@ -178,8 +179,7 @@ function createQueueItem(item) {
 }
 
 function trimHistory() {
-  const limit = historyLimitField.value;
-  data.history.splice(0, data.history.length - limit);
+  data.history.splice(0, data.history.length - data.historyLimit);
   window.electronAPI.saveData(data);
   repaintHistory();
 }

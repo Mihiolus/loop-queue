@@ -77,6 +77,6 @@ async function handleLoadData() {
     return JSON.parse(fileContents);
   } catch (err){
     console.error( err);
-    return { queue: [], history: [] };
+    return { queue: [], history: [], historyLimit: 1 };
   }
 }
