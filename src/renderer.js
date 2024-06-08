@@ -181,12 +181,6 @@ function createQueueItem(item) {
   return queueItem;
 }
 
-function getItemIndex(queueItem) {
-  const queueArray = Array.from(queueNode.children);
-  const itemIndex = queueArray.indexOf(queueItem);
-  return itemIndex;
-}
-
 function createHistoryItem(item) {
   const historyItem = document.createElement('li');
   const span = document.createElement('span');
