@@ -18,3 +18,7 @@ thead {
   display: flex;
   justify-content: space-around;
 }
+
+.last-history-item {
+  font-weight: bold;
+}

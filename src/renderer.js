@@ -82,6 +82,7 @@ function updateHistory() {
   for (const historyItem of data.history) {
     fragment.appendChild(createHistoryItem(historyItem));
   }
+  fragment.lastElementChild?.classList.add("last-history-item");
   historyNode.appendChild(fragment);
 }
 
