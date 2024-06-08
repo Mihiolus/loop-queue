@@ -36,8 +36,8 @@ const historyNode = document.querySelector('#history ol')
 const historyLimitField = document.querySelector('#history-limit')
 
 const data = await window.electronAPI.loadData();
-updateQueue();
-updateHistory();
+repaintQueue();
+repaintHistory();
 
 const newItemForm = document.querySelector('form');
 
@@ -51,7 +51,7 @@ newItemForm.addEventListener('submit', e => {
   itemInput.dispatchEvent(event);
   data.queue.push(newItem);
   window.electronAPI.saveData(data);
-  updateQueue();
+  repaintQueue();
 })
 
 itemInput.addEventListener('input', () => {
@@ -67,7 +67,7 @@ historyLimitField.addEventListener('change', () => {
   }
 })
 
-function updateQueue() {
+function repaintQueue() {
   queueNode.innerHTML = '';
   const fragment = document.createDocumentFragment();
   for (const queueItem of data.queue) {
@@ -76,7 +76,7 @@ function updateQueue() {
   queueNode.appendChild(fragment);
 }
 
-function updateHistory() {
+function repaintHistory() {
   historyNode.innerHTML = '';
   const fragment = document.createDocumentFragment();
   for (const historyItem of data.history) {
@@ -163,11 +163,11 @@ function createQueueItem(item) {
     const limit = historyLimitField.value;
     data.history.splice(0, data.history.length - limit);
     window.electronAPI.saveData(data);
-    updateHistory();
+    repaintHistory();
     const itemIndex = data.queue.indexOf(item);
     data.queue.splice(itemIndex, 1);
     data.queue.unshift(item);
-    updateQueue();
+    repaintQueue();
   });
   deleteButton.textContent = "x";
   deleteButton.addEventListener('click', () => {
