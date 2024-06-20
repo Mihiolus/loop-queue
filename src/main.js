@@ -18,18 +18,33 @@ db.on('open', () => {
 
 function createTables(db) {
   db.run(`
-    CREATE TABLE queue (
+    CREATE TABLE IF NOT EXISTS queue (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
     )`);
   db.run(`
-      CREATE TABLE plan (
+      CREATE TABLE IF NOT EXISTS plan (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL
       )`);
 }
 
 createTables(db);
+
+function createQueueItem(db, name) {
+  const stmt = db.prepare(`
+    INSERT INTO queue (name) VALUES (?)
+    `);
+
+    stmt.run(name);
+    stmt.finalize();
+}
+
+createQueueItem(db, 'Test item');
+
+db.each('SELECT rowid AS id, name FROM queue', (err, row) => {
+  console.log(row.id + ": " + row.name);
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
