@@ -14,14 +14,22 @@ const db = new sqlite3.Database(path.join(folder_path, "./loop-queue-data.sqlite
 
 db.on('open', () => {
   console.log('Database is ready.');
-
-  db.close((err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Database connection closed.');
-  });
 });
+
+function createTables(db) {
+  db.run(`
+    CREATE TABLE queue (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+    )`);
+  db.run(`
+      CREATE TABLE plan (
+      id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL
+      )`);
+}
+
+createTables(db);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -79,10 +87,19 @@ app.on('activate', () => {
   }
 });
 
+app.on('before-quit', () => {
+  db.close((err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Database connection closed.');
+  });
+})
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-async function handleSaveData(_event, data){
-  try{
+async function handleSaveData(_event, data) {
+  try {
     await writeFile(file_path, JSON.stringify(data));
   } catch (err) {
     console.error(err);
@@ -90,11 +107,11 @@ async function handleSaveData(_event, data){
 }
 
 async function handleLoadData() {
-  try{
-    const fileContents = await readFile(file_path, { encoding: 'utf-8'});
+  try {
+    const fileContents = await readFile(file_path, { encoding: 'utf-8' });
     return JSON.parse(fileContents);
-  } catch (err){
-    console.error( err);
+  } catch (err) {
+    console.error(err);
     return { queue: [], history: [], historyLimit: 1 };
   }
 }
