@@ -16,22 +16,29 @@ db.on('open', () => {
   console.log('Database is ready.');
 });
 
+db.serialize(() => {
+  createTables(db);
+  createQueueItem(db, 'Test item');
+  db.each('SELECT rowid AS id, name FROM queue', (err, row) => {
+    console.log(row.id + ": " + row.name);
+  });
+})
+
+
 function createTables(db) {
+  console.log("Creating tables");
   db.run(`
     CREATE TABLE IF NOT EXISTS queue (
-    id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
     )`);
   db.run(`
       CREATE TABLE IF NOT EXISTS plan (
-      id INTEGER PRIMARY KEY,
       name TEXT NOT NULL
       )`);
 }
 
-createTables(db);
-
 function createQueueItem(db, name) {
+  console.log("Creating test item");
   const stmt = db.prepare(`
     INSERT INTO queue (name) VALUES (?)
     `);
@@ -39,12 +46,6 @@ function createQueueItem(db, name) {
     stmt.run(name);
     stmt.finalize();
 }
-
-createQueueItem(db, 'Test item');
-
-db.each('SELECT rowid AS id, name FROM queue', (err, row) => {
-  console.log(row.id + ": " + row.name);
-});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
