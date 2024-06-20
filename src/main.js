@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 import { readFile, writeFile } from 'fs/promises';
+const initSqlJs = require('sql.js');
 
 const folder_path = app.getPath("documents");
 const file_path = path.join(folder_path, "./loop-queue-data.json")
@@ -63,8 +64,8 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-async function handleSaveData(_event, data){
-  try{
+async function handleSaveData(_event, data) {
+  try {
     await writeFile(file_path, JSON.stringify(data));
   } catch (err) {
     console.error(err);
@@ -72,11 +73,17 @@ async function handleSaveData(_event, data){
 }
 
 async function handleLoadData() {
-  try{
-    const fileContents = await readFile(file_path, { encoding: 'utf-8'});
-    return JSON.parse(fileContents);
-  } catch (err){
-    console.error( err);
+  try {
+    const fileContents = await readFile(file_path, { encoding: 'utf-8' });
+
+    const SQL = await initSqlJs({});
+    const db_path = path.join(folder_path, "./loop-queue-data.sqlite");
+    // const db_contents = await readFile(db_path);
+    const db = new SQL.Database();
+    // return JSON.parse(fileContents);
+    return db;
+  } catch (err) {
+    console.error(err);
     return { queue: [], history: [], historyLimit: 1 };
   }
 }

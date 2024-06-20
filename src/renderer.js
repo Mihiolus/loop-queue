@@ -36,6 +36,12 @@ const historyNode = document.querySelector('#history ol')
 const historyLimitField = document.querySelector('#history-limit')
 
 const data = await window.electronAPI.loadData();
+console.log(data);
+let sqlstr = "CREATE TABLE hello (a int, b char); \
+INSERT INTO hello VALUES (0, 'hello'); \
+INSERT INTO hello VALUES (1, 'world');";
+data.run(sqlstr);
+console.log(data);
 repaintQueue();
 repaintHistory();
 historyLimitField.value = data.historyLimit;
