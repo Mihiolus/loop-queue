@@ -12,6 +12,17 @@ const db = new sqlite3.Database(path.join(folder_path, "./loop-queue-data.sqlite
   console.log('Connected to the database.');
 });
 
+db.on('open', () => {
+  console.log('Database is ready.');
+
+  db.close((err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Database connection closed.');
+  });
+});
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
