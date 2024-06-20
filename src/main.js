@@ -1,9 +1,16 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 import { readFile, writeFile } from 'fs/promises';
+const sqlite3 = require('sqlite3').verbose();
 
 const folder_path = app.getPath("documents");
 const file_path = path.join(folder_path, "./loop-queue-data.json")
+const db = new sqlite3.Database(path.join(folder_path, "./loop-queue-data.sqlite"), (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('Connected to the database.');
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
