@@ -29,7 +29,8 @@ function createTables(db) {
   console.log("Creating tables");
   db.run(`
     CREATE TABLE IF NOT EXISTS queue (
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    index_in_queue INTEGER NOT NULL
     )`);
   db.run(`
       CREATE TABLE IF NOT EXISTS plan (
