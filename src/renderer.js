@@ -51,6 +51,7 @@ newItemForm.addEventListener('submit', e => {
   const event = new Event('input');
   itemInput.dispatchEvent(event);
   data.queue.push(newItem);
+  window.electronAPI.dbRun('INSERT INTO queue (name) VALUES (?)', [itemName]);
   window.electronAPI.saveData(data);
   repaintQueue();
 })

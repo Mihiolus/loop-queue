@@ -9,12 +9,12 @@ const db = new Database(path.join(folder_path, "./loop-queue-data.db"));
 db.pragma('journal_mode = WAL');
 let info = db.prepare('CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY, name TEXT NOT NULL);').run();
 info = db.prepare('CREATE TABLE IF NOT EXISTS plan (id INTEGER PRIMARY KEY, name TEXT NOT NULL);').run();
-info = db.prepare('INSERT INTO queue (name) VALUES (?)').run('Test item');
-console.log(info.changes);
 
 const items = db.prepare('SELECT * FROM queue').all();
 
-console.log(items.length);
+for (const item of items){
+  console.log(item.name);
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -50,6 +50,7 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  ipcMain.on('db-run', handleDBRun);
   ipcMain.on('save-data', handleSaveData);
   ipcMain.handle('loadData', handleLoadData);
   createWindow();
@@ -90,4 +91,12 @@ async function handleLoadData() {
     console.error( err);
     return { queue: [], history: [], historyLimit: 1 };
   }
+}
+
+async function handleDBRun(_event, SQLStatement, [...bindParameters]){
+  db.prepare(SQLStatement).run(bindParameters);
+}
+
+async function handleDBAll(SQLStatement, [...bindParameters]){
+  return db.prepare(SQLStatement).all(bindParameters);
 }

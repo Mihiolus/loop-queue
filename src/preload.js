@@ -4,5 +4,6 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     saveData: (data) => ipcRenderer.send('save-data', data),
+    dbRun: (statement, bindParameters) => ipcRenderer.send('db-run', statement, bindParameters),
     loadData: () => ipcRenderer.invoke('loadData')
 })
