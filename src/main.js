@@ -7,8 +7,18 @@ const folder_path = app.getPath("documents");
 const file_path = path.join(folder_path, "./loop-queue-data.json")
 const db = new Database(path.join(folder_path, "./loop-queue-data.db"));
 db.pragma('journal_mode = WAL');
-let info = db.prepare('CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY, name TEXT NOT NULL);').run();
+let info = db.prepare('CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY, name TEXT NOT NULL, index INTEGER NOT NULL);').run();
 info = db.prepare('CREATE TABLE IF NOT EXISTS plan (id INTEGER PRIMARY KEY, name TEXT NOT NULL);').run();
+db.prepare('CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY, name TEXT NOT NULL').run();
+db.prepare(
+  `CREATE TABLE IF NOT EXISTS item_categories (
+    category_id INTEGER,
+    item_id INTEGER,
+    PRIMARY KEY (category_id, item_id),
+    FOREIGN KEY (category id) REFERENCES categories(id),
+    FOREIGN KEY (item_id) REFERENCES queue(id)
+  );`
+).run();
 
 const items = db.prepare('SELECT * FROM queue').all();
 
